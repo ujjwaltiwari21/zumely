@@ -31,9 +31,17 @@ export function Hero() {
                 </h1>
 
                 {/* Optimized Sub-headline */}
-                <p className="max-w-[700px] mx-auto text-lg md:text-xl text-slate-600 dark:text-slate-400 leading-relaxed font-medium px-4">
-                    Zumely helps MCA students craft industry-leading resumes with AI.
-                    Optimize for ATS, track applications, and land your dream job faster.
+                <p className="max-w-[850px] mx-auto text-[15px] md:text-[19px] text-slate-500 dark:text-slate-400 leading-[1.8] font-light tracking-wide px-6">
+                    Architecting the future of <span className="text-blue-500 font-medium">professional identities</span> through 
+                    <span className="text-slate-900 dark:text-white font-medium"> generative AI intelligence</span>. 
+                        Our neural systems engineer <strong className="font-semibold text-slate-800 dark:text-slate-200">elite-level ATS resumes</strong> 
+                        _calibrated for the {new Date().getFullYear()} global tech ecosystem—transforming potential into 
+                        <span className="relative inline-block">
+                        <span className="bg-gradient-to-r from-blue-600 via-indigo-400 to-emerald-400 bg-clip-text text-transparent font-bold">
+                        _unstoppable career momentum_
+                    </span>
+                    <span className="absolute -bottom-1 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-blue-500/40 to-transparent"></span>
+                    </span>
                 </p>
 
                 {/* Centered CTA Button */}

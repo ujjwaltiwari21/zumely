@@ -42,9 +42,9 @@ export function Navbar() {
         
         <div className="flex items-center gap-8">
           <Link href="/" className="group flex items-center gap-2">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold group-hover:rotate-6 transition-transform">
+            {/* <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold group-hover:rotate-6 transition-transform">
               Z
-            </div>
+            </div> */}
             <span className="text-2xl font-extrabold tracking-tighter bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
               Zumely
             </span>
@@ -90,7 +90,7 @@ export function Navbar() {
                     </Button>
                   </Link>
                   <Link href="/signup">
-                    <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/20">
+                    <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-500/20">
                       Get Started
                     </Button>
                   </Link>
