@@ -2,6 +2,8 @@
 
 import React from "react";
 import { Zap, Shield, BarChart3, Smartphone, Globe, CheckCircle2, Sparkles } from "lucide-react";
+import { Footer } from "@/components/shared/Footer";
+import Partners from "@/components/shared/Partners";
 
 const features = [
   {
@@ -109,6 +111,9 @@ export default function FeaturesPage() {
           Innovation
         </p>
       </div>
+
+      <Partners/>
+      <Footer/>
     </div>
   );
 }
