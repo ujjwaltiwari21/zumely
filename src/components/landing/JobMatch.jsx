@@ -55,7 +55,7 @@ export function JobMatch() {
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-600/5 border border-blue-600/10">
               <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-600">AI Placement Engine</span>
             </div>
-            <h2 className="text-4xl md:text-6xl font-light text-slate-900 dark:text-white tracking-tighter leading-tight">
+            <h2 className="text-4xl md:text-6xl font-light text-slate-800 dark:text-white tracking-tighter leading-tight">
               Instant Career <br />
               <span className="font-semibold text-blue-600">Opportunity Matching.</span>
             </h2>

@@ -23,14 +23,14 @@ export function Comparison() {
             The Zumely Advantage
           </div> */}
           
-          <h2 id="comp-heading" className="flex flex-wrap justify-center items-center gap-x-2 md:gap-x-3 text-2xl md:text-5xl font-medium text-slate-900 dark:text-white tracking-tighter leading-tight">
+          <h2 id="comp-heading" className="flex flex-wrap justify-center items-center gap-x-2 md:gap-x-3 text-2xl md:text-5xl font-medium text-slate-800 dark:text-white tracking-tighter leading-tight">
             <span>Why Choose</span>
             <span className="text-blue-600 dark:text-blue-500 italic">Zumely AI</span>
             <span>Over Legacy Systems?</span>
           </h2>
         </header>
 
-        <div className="relative rounded-[1.5rem] md:rounded-[2.5rem] border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-white/[0.02] backdrop-blur-xl shadow-xl overflow-hidden">
+        <div className="relative rounded-[1.5rem] md:rounded-[2.5rem] border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-white/2 backdrop-blur-xl shadow-xl overflow-hidden">
           
           <div className="grid grid-cols-3 bg-slate-50/50 dark:bg-white/3 p-4 md:p-8 border-b border-slate-200 dark:border-white/10">
             <div className="text-[9px] md:text-[11px] font-bold uppercase tracking-wider text-slate-400">Capability</div>
@@ -42,7 +42,7 @@ export function Comparison() {
 
           <div className="divide-y divide-slate-100 dark:divide-white/5">
             {features.map((f, i) => (
-              <div key={i} className="grid grid-cols-3 p-4 md:p-7 items-center hover:bg-slate-50/80 dark:hover:bg-white/[0.02] transition-colors group">
+              <div key={i} className="grid grid-cols-3 p-4 md:p-7 items-center hover:bg-slate-50/80 dark:hover:bg-white/2 transition-colors group">
                 
                 <div className="text-[11px] md:text-sm font-medium text-slate-700 dark:text-slate-300 pr-2">
                   {f.name}

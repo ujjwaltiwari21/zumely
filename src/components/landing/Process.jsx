@@ -59,7 +59,7 @@ export function Process() {
             <Sparkles size={14} className="text-blue-600" />
             <span className="text-[10px] uppercase tracking-widest text-blue-600 font-bold">The Workflow</span>
           </div>
-          <h2 className="text-3xl md:text-5xl font-medium tracking-tighter text-slate-900 dark:text-white">
+          <h2 className="text-3xl md:text-5xl font-medium tracking-tighter text-slate-800 dark:text-white">
             Smart Way to Build Your Professional <span className="font-bold text-transparent bg-clip-text bg-linear-to-r from-blue-600 via-indigo-500 to-emerald-500 dark:from-blue-400 dark:via-indigo-300 dark:to-emerald-400">
                Identity
             </span>

@@ -56,7 +56,7 @@ export function Experience3D() {
 
       <h2
         ref={textRef}
-        className="text-[10vw] md:text-[14vw] font-black uppercase tracking-tighter whitespace-nowrap
+        className="text-[20vw] md:text-[14vw] font-black uppercase tracking-tighter whitespace-nowrap
                    antialiased select-none pointer-events-none 
                    text-slate-900 dark:text-white
                    will-change-transform transform-gpu

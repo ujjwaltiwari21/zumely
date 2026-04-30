@@ -15,7 +15,7 @@ export function AtsVisual() {
                             <Zap size={14} className="text-emerald-500 fill-emerald-500" />
                             <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">AI Score Engine</span>
                         </div>
-                        <h2 className="text-4xl md:text-6xl lg:text-7xl font-light text-slate-900 dark:text-slate-100 leading-[1.1] tracking-tight">
+                        <h2 className="text-4xl md:text-6xl lg:text-7xl font-light text-slate-800 dark:text-slate-100 leading-[1.1] tracking-tight">
                             Optimized for <br />
                             <span className="text-emerald-600 font-normal">Success</span>
                         </h2>
