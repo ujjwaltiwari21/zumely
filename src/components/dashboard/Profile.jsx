@@ -13,43 +13,56 @@ export default function ProfilePage() {
   const [isMobile, setIsMobile] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
   const [activeTab, setActiveTab] = useState("personal")
+  const [keyboardVisible, setKeyboardVisible] = useState(false)
 
   // User Data State
   const [userData, setUserData] = useState({
-    // Personal Info
     fullName: "",
     email: "",
     phone: "",
     location: "",
     dob: "",
-    
-    // Professional Info
     jobTitle: "",
     company: "",
     experience: "",
     industry: "",
-    
-    // Education
     education: [{ degree: "", college: "", year: "", percentage: "" }],
-    
-    // Skills
     skills: [{ name: "", level: "Intermediate" }],
-    
-    // Certifications
     certifications: [{ name: "", issuer: "", year: "" }],
-    
-    // Social Links
     linkedin: "",
     github: "",
     twitter: "",
     portfolio: "",
-    
-    // Settings
     emailNotifications: true,
     pushNotifications: false,
     profileVisibility: "public",
     language: "English"
   })
+
+  // Get initials from name for avatar
+  const getInitials = () => {
+    if (!userData.fullName) return "U"
+    const names = userData.fullName.split(" ")
+    if (names.length === 1) return names[0].charAt(0).toUpperCase()
+    return (names[0].charAt(0) + names[names.length - 1].charAt(0)).toUpperCase()
+  }
+
+  // Get gradient based on name
+  const getAvatarGradient = () => {
+    const name = userData.fullName || "User"
+    const gradients = [
+      "from-blue-500 to-indigo-600",
+      "from-purple-500 to-pink-600",
+      "from-green-500 to-teal-600",
+      "from-orange-500 to-red-600",
+      "from-yellow-500 to-orange-600",
+      "from-cyan-500 to-blue-600",
+      "from-rose-500 to-pink-600",
+      "from-emerald-500 to-green-600"
+    ]
+    const index = name.length % gradients.length
+    return gradients[index]
+  }
 
   useEffect(() => {
     const checkMobile = () => {
@@ -57,10 +70,23 @@ export default function ProfilePage() {
     }
     checkMobile()
     window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
+    
+    // Detect keyboard open/close on mobile
+    const handleResize = () => {
+      if (window.visualViewport) {
+        const viewportHeight = window.visualViewport.height
+        const windowHeight = window.innerHeight
+        setKeyboardVisible(viewportHeight < windowHeight - 100)
+      }
+    }
+    
+    window.visualViewport?.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', checkMobile)
+      window.visualViewport?.removeEventListener('resize', handleResize)
+    }
   }, [])
 
-  // Load saved data from localStorage
   useEffect(() => {
     const savedData = localStorage.getItem("userProfile")
     if (savedData) {
@@ -68,7 +94,6 @@ export default function ProfilePage() {
     }
   }, [])
 
-  // Save data
   const saveProfile = () => {
     localStorage.setItem("userProfile", JSON.stringify(userData))
     setIsEditing(false)
@@ -76,7 +101,6 @@ export default function ProfilePage() {
     setTimeout(() => setShowSuccess(false), 3000)
   }
 
-  // Add/Remove functions
   const addEducation = () => {
     setUserData({
       ...userData,
@@ -116,22 +140,15 @@ export default function ProfilePage() {
     setUserData({ ...userData, certifications: newCertifications })
   }
 
-  // Tabs for mobile
   const tabs = [
     { id: "personal", label: "Personal", icon: User },
     { id: "professional", label: "Professional", icon: Briefcase },
     { id: "education", label: "Education", icon: GraduationCap },
     { id: "skills", label: "Skills", icon: Wrench },
     { id: "social", label: "Social", icon: Link2 },
-    { id: "settings", label: "Settings", icon: SettingsIconPlaceholder },
+    { id: "settings", label: "Settings", icon: Shield },
   ]
 
-  // Placeholder for Settings icon
-  function SettingsIconPlaceholder(props) {
-    return <Shield {...props} />
-  }
-
-  // Stats
   const stats = [
     { label: "Profile Views", value: "247", icon: Eye, change: "+12 this week" },
     { label: "Applications", value: "18", icon: FileText, change: "3 in review" },
@@ -140,7 +157,7 @@ export default function ProfilePage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-[#0A0A0A] dark:to-[#0A0A0A] transition-colors duration-500">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-[#0A0A0A] dark:to-[#0A0A0A] transition-colors duration-500 pb-20 md:pb-8">
       
       {/* Success Toast */}
       {showSuccess && (
@@ -211,15 +228,15 @@ export default function ProfilePage() {
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           
-          {/* Left Sidebar - Profile Summary */}
+          {/* Left Sidebar - Profile Summary - Udemy Style */}
           <div className="lg:col-span-1">
             <div className="bg-white/60 dark:bg-white/5 rounded-2xl border border-slate-200 dark:border-white/10 backdrop-blur-sm p-5 sticky top-4">
               
-              {/* Profile Picture */}
+              {/* Udemy Style Profile Avatar */}
               <div className="flex flex-col items-center text-center mb-5">
                 <div className="relative">
-                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
-                    <User size={40} className="text-white" />
+                  <div className={`w-24 h-24 rounded-2xl bg-gradient-to-br ${getAvatarGradient()} flex items-center justify-center shadow-lg transform transition-transform hover:scale-105`}>
+                    <span className="text-3xl font-bold text-white">{getInitials()}</span>
                   </div>
                   {isEditing && (
                     <button className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-slate-700 text-white flex items-center justify-center shadow-lg hover:bg-slate-600 transition-colors">
@@ -227,7 +244,7 @@ export default function ProfilePage() {
                     </button>
                   )}
                 </div>
-                <h2 className="text-lg font-bold text-slate-900 dark:text-white mt-3">
+                <h2 className="text-xl font-bold text-slate-900 dark:text-white mt-4">
                   {userData.fullName || "Your Name"}
                 </h2>
                 <p className="text-sm text-slate-500 dark:text-slate-400">
@@ -243,7 +260,7 @@ export default function ProfilePage() {
               <div className="space-y-3 pt-4 border-t border-slate-200 dark:border-white/10">
                 <div className="flex items-center gap-3 text-sm">
                   <Mail size={16} className="text-slate-400" />
-                  <span className="text-slate-600 dark:text-slate-300">{userData.email || "Email not added"}</span>
+                  <span className="text-slate-600 dark:text-slate-300 truncate">{userData.email || "Email not added"}</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <Phone size={16} className="text-slate-400" />
@@ -264,13 +281,13 @@ export default function ProfilePage() {
                   <span className="text-blue-500 font-semibold">85%</span>
                 </div>
                 <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full" style={{ width: "85%" }}></div>
+                  <div className={`h-full bg-gradient-to-r ${getAvatarGradient()} rounded-full`} style={{ width: "85%" }}></div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Right Content - Forms */}
+          {/* Right Content - Forms (same as before) */}
           <div className="lg:col-span-2 space-y-5">
             
             {/* Personal Information */}
@@ -632,7 +649,7 @@ export default function ProfilePage() {
               </div>
             )}
 
-            {/* Social Links - WITHOUT ICONS */}
+            {/* Social Links */}
             {(activeTab === "social" || !isMobile) && (
               <div className="bg-white/60 dark:bg-white/5 rounded-2xl border border-slate-200 dark:border-white/10 backdrop-blur-sm p-5">
                 <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
@@ -711,7 +728,7 @@ export default function ProfilePage() {
                         disabled={!isEditing}
                         className="sr-only peer"
                       />
-                      <div className="w-10 h-5 bg-slate-300 dark:bg-slate-600 rounded-full peer peer-checked:bg-blue-500 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                      <div className="w-10 h-5 bg-slate-300 dark:bg-slate-600 rounded-full peer peer-checked:bg-blue-500 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
                     </label>
                   </div>
                   
@@ -728,7 +745,7 @@ export default function ProfilePage() {
                         disabled={!isEditing}
                         className="sr-only peer"
                       />
-                      <div className="w-10 h-5 bg-slate-300 dark:bg-slate-600 rounded-full peer peer-checked:bg-blue-500 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                      <div className="w-10 h-5 bg-slate-300 dark:bg-slate-600 rounded-full peer peer-checked:bg-blue-500 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
                     </label>
                   </div>
                   

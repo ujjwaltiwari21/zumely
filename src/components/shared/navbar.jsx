@@ -31,7 +31,10 @@ import {
   Mail,
   BarChart3,
   Sparkles,
-  ChevronRight
+  ChevronRight,
+  Compass,
+  Clock,
+  Heart
 } from "lucide-react"
 
 export function Navbar() {
@@ -41,6 +44,7 @@ export function Navbar() {
   const [notifications, setNotifications] = useState(3)
   const [messages, setMessages] = useState(2)
   const [mounted, setMounted] = useState(false)
+  const [keyboardVisible, setKeyboardVisible] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
   const supabase = createClient()
@@ -48,6 +52,19 @@ export function Navbar() {
 
   useEffect(() => {
     setMounted(true)
+  }, [])
+
+  // Detect keyboard visibility on mobile
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.visualViewport) {
+      const handleResize = () => {
+        const viewportHeight = window.visualViewport?.height || window.innerHeight
+        const windowHeight = window.innerHeight
+        setKeyboardVisible(viewportHeight < windowHeight - 100)
+      }
+      window.visualViewport.addEventListener('resize', handleResize)
+      return () => window.visualViewport?.removeEventListener('resize', handleResize)
+    }
   }, [])
 
   useEffect(() => {
@@ -102,12 +119,13 @@ export function Navbar() {
     { icon: User, label: "Profile", href: "/profile", active: pathname === "/profile" },
   ]
 
-  // Mobile Bottom Tab Items
+  // Mobile Bottom Tab Items - Glassmorphism Style (Courses instead of Saved)
   const mobileTabItems = [
-    { icon: Home, label: "Home", href: "/" },
-    { icon: Briefcase, label: "Jobs", href: "/jobs" },
-    { icon: GraduationCap, label: "Courses", href: "/courses" },
-    { icon: User, label: "Profile", href: "/profile" },
+    { icon: Home, label: "Home", href: "/", active: pathname === "/" },
+    { icon: Search, label: "Explore", href: "/explore", active: pathname === "/explore" },
+    { icon: Briefcase, label: "Jobs", href: "/jobs", active: pathname === "/jobs" },
+    { icon: GraduationCap, label: "Courses", href: "/courses", active: pathname === "/courses" },
+    { icon: User, label: "Profile", href: "/profile", active: pathname === "/profile" },
   ]
 
   if (!mounted) {
@@ -116,7 +134,7 @@ export function Navbar() {
 
   return (
     <>
-      {/* Desktop Navbar - Apple Style */}
+      {/* Desktop Navbar - ThemeToggle VISIBLE here */}
       <nav className="hidden md:block sticky top-0 z-50 w-full bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-800/50 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-center h-14">
@@ -130,7 +148,7 @@ export function Navbar() {
               </span>
             </Link>
 
-            {/* Desktop Navigation Icons - Apple Style No Text on Hover */}
+            {/* Desktop Navigation Icons */}
             <div className="flex items-center gap-1">
               {desktopNavItems.map((item) => (
                 <Link
@@ -143,7 +161,6 @@ export function Navbar() {
                   }`}
                 >
                   <item.icon size={20} strokeWidth={1.5} />
-                  {/* Tooltip on Hover */}
                   <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-slate-800 dark:bg-slate-700 text-white text-[10px] font-medium rounded-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                     {item.label}
                   </span>
@@ -151,7 +168,7 @@ export function Navbar() {
               ))}
             </div>
 
-            {/* Right Side Actions */}
+            {/* Right Side Actions - ThemeToggle KEPT HERE for desktop */}
             <div className="flex items-center gap-2">
               {/* Notifications */}
               <button className="relative p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200">
@@ -173,6 +190,7 @@ export function Navbar() {
                 )}
               </button>
 
+              {/* THEME TOGGLE - Visible on Desktop */}
               <ThemeToggle />
 
               <div className="w-px h-5 bg-slate-200 dark:bg-slate-700 mx-1" />
@@ -218,10 +236,10 @@ export function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile View - Top Header with Menu Button + Bottom Tab Bar (iOS Style) */}
+      {/* Mobile View */}
       <div className="md:hidden">
-        {/* Top Header with Menu Button - Curved Bottom */}
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-800/50 rounded-b-3xl shadow-lg">
+        {/* Top Header with Menu Button - THEME TOGGLE REMOVED from header */}
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-800/50 rounded-b-3xl shadow-lg">
           <div className="flex justify-between items-center px-5 py-3">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2">
@@ -233,11 +251,8 @@ export function Navbar() {
               </span>
             </Link>
 
-            {/* Right Side Icons */}
+            {/* Right Side Icons - NO THEME TOGGLE HERE */}
             <div className="flex items-center gap-2">
-              <ThemeToggle />
-              
-              {/* Menu Button */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="flex items-center justify-center w-10 h-10 rounded-2xl bg-slate-100 dark:bg-slate-800 active:scale-95 transition-all duration-200 shadow-sm"
@@ -252,82 +267,72 @@ export function Navbar() {
           </div>
         </nav>
 
-        {/* Main Content Spacer - Prevents content from hiding under navbar */}
+        {/* Main Content Spacer */}
         <div className="h-16" />
 
-        {/* iOS Style Bottom Tab Bar - Curved Top */}
-        <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl border-t border-slate-200/50 dark:border-slate-800/50 rounded-t-3xl shadow-lg safe-bottom">
-          <div className="flex justify-around items-center px-4 py-3">
-            {mobileTabItems.map((item) => {
-              const isActive = pathname === item.href
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`flex flex-col items-center gap-1.5 px-4 py-2 rounded-2xl transition-all duration-200 ${
-                    isActive
-                      ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10"
-                      : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
-                  }`}
-                >
-                  <item.icon 
-                    size={24} 
-                    strokeWidth={isActive ? 2 : 1.5}
-                    fill={isActive ? "currentColor" : "none"}
-                    className="transition-all"
-                  />
-                  <span className={`text-[11px] font-medium ${isActive ? "opacity-100 font-semibold" : "opacity-70"}`}>
-                    {item.label}
-                  </span>
-                </Link>
-              )
-            })}
+        {/* Glassmorphism Bottom Tab Bar - Premium Blur Effect */}
+        {!keyboardVisible && (
+          <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/70 dark:bg-slate-950/70 backdrop-blur-2xl border-t border-white/20 dark:border-white/10 rounded-t-2xl shadow-2xl safe-bottom">
+            <div className="flex justify-around items-center px-2 py-2">
+              {mobileTabItems.map((item) => {
+                const isActive = item.active
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all duration-200 group ${
+                      isActive
+                        ? "text-blue-600 dark:text-blue-400"
+                        : "text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400"
+                    }`}
+                  >
+                    <div className={`relative transition-all duration-200 ${isActive ? 'scale-110' : 'scale-100'}`}>
+                      <item.icon 
+                        size={22} 
+                        strokeWidth={isActive ? 2.5 : 1.8}
+                        className="transition-all"
+                      />
+                      {isActive && (
+                        <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-blue-500 rounded-full"></div>
+                      )}
+                    </div>
+                    <span className={`text-[10px] font-medium transition-all ${isActive ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'opacity-70'}`}>
+                      {item.label}
+                    </span>
+                  </Link>
+                )
+              })}
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* Bottom Safe Area Spacer - Prevents content from hiding under bottom bar */}
-        <div className="h-20" />
+        {/* Bottom Safe Area Spacer */}
+        {!keyboardVisible && <div className="h-16" />}
       </div>
 
-      {/* Mobile Bottom Sheet Menu - Settings & Theme inside */}
+      {/* Mobile Bottom Sheet Menu - ThemeToggle INSIDE here */}
       <div 
         className={`fixed inset-x-0 bottom-0 z-50 transform transition-all duration-300 ease-out md:hidden ${
           mobileMenuOpen ? 'translate-y-0' : 'translate-y-full'
         }`}
       >
-        {/* Backdrop */}
+        {/* Backdrop with blur */}
         <div 
-          className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${
+          className={`absolute inset-0 bg-black/40 backdrop-blur-md transition-opacity duration-300 ${
             mobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
           }`}
           onClick={() => setMobileMenuOpen(false)}
         />
         
-        {/* Bottom Sheet Content - Premium Curved */}
-        <div className="relative bg-white dark:bg-slate-900 rounded-t-3xl shadow-2xl border-t border-slate-200 dark:border-slate-800 max-h-[85vh] overflow-y-auto">
+        {/* Bottom Sheet Content - Glassmorphism */}
+        <div className="relative bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl rounded-t-3xl shadow-2xl border-t border-white/20 dark:border-white/10 max-h-[85vh] overflow-y-auto">
           {/* Handle Bar */}
-          <div className="sticky top-0 bg-white dark:bg-slate-900 pt-4 pb-2 flex justify-center">
+          <div className="sticky top-0 bg-transparent pt-4 pb-2 flex justify-center">
             <div className="w-12 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full"></div>
           </div>
 
-          {/* Theme Toggle inside Menu */}
-          <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-800">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-                  <Sparkles size={20} className="text-slate-600 dark:text-slate-400" />
-                </div>
-                <div>
-                  <p className="font-semibold text-slate-800 dark:text-white">Appearance</p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">Switch between light and dark mode</p>
-                </div>
-              </div>
-              <ThemeToggle />
-            </div>
-          </div>
-
           {/* User Profile Section */}
-          <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-800">
+          <div className="px-5 py-4 border-b border-slate-100/50 dark:border-slate-800/50">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
                 <User size={22} className="text-white" />
@@ -341,6 +346,22 @@ export function Navbar() {
                 </p>
               </div>
               <ChevronRight size={18} className="text-slate-400" />
+            </div>
+          </div>
+
+          {/* THEME TOGGLE INSIDE MENU - Moved here for mobile */}
+          <div className="px-5 py-4 border-b border-slate-100/50 dark:border-slate-800/50">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                  <Sparkles size={20} className="text-slate-600 dark:text-slate-400" />
+                </div>
+                <div>
+                  <p className="font-semibold text-slate-800 dark:text-white">Appearance</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Switch between light and dark mode</p>
+                </div>
+              </div>
+              <ThemeToggle />
             </div>
           </div>
 
@@ -375,7 +396,7 @@ export function Navbar() {
           </div>
 
           {/* Auth Actions */}
-          <div className="p-4 pt-2 pb-8 border-t border-slate-100 dark:border-slate-800">
+          <div className="p-4 pt-2 pb-8 border-t border-slate-100/50 dark:border-slate-800/50">
             {!loading && (
               <>
                 {user ? (
