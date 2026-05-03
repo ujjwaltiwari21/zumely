@@ -3,6 +3,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { toJpeg } from "html-to-image";
 import jsPDF from "jspdf";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function OverleafResumeTemplate() {
   const resumeRef = useRef();
@@ -52,136 +53,125 @@ export default function OverleafResumeTemplate() {
     setData({ ...data, [section]: arr });
   };
 
-  // Fixed PDF download with clickable links
   const downloadPDF = async () => {
-  if (!resumeRef.current || isDownloading) return;
-  setIsDownloading(true);
-  try {
-    const element = resumeRef.current;
-    
-    // Get the actual position of links in the DOM
-    const links = element.querySelectorAll('a');
-    const linkPositions = [];
-    
-    links.forEach(link => {
-      const rect = link.getBoundingClientRect();
-      const elementRect = element.getBoundingClientRect();
+    if (!resumeRef.current || isDownloading) return;
+    setIsDownloading(true);
+    try {
+      const element = resumeRef.current;
       
-      // Calculate relative position in mm
-      const relativeX = rect.left - elementRect.left;
-      const relativeY = rect.top - elementRect.top;
+      const links = element.querySelectorAll('a');
+      const linkPositions = [];
       
-      // Convert px to mm (1 inch = 25.4mm, 96 DPI = 96px per inch)
-      const pxToMm = (px) => (px * 25.4) / 96;
-      
-      linkPositions.push({
-        url: link.href,
-        x: pxToMm(relativeX),
-        y: pxToMm(relativeY),
-        width: pxToMm(rect.width),
-        height: pxToMm(rect.height)
-      });
-    });
-    
-    const dataUrl = await toJpeg(element, {
-      quality: 0.95,
-      pixelRatio: 2,
-      backgroundColor: '#ffffff',
-      cacheBust: true,
-    });
-    
-    const img = new Image();
-    img.src = dataUrl;
-    await new Promise(resolve => { img.onload = resolve; });
-    
-    const imgWidth = img.width;
-    const imgHeight = img.height;
-    
-    const a4WidthPx = 794;
-    const a4HeightPx = 1123;
-    const topMarginPx = 38;
-    const bottomMarginPx = 40;
-    
-    const scale = a4WidthPx / imgWidth;
-    const scaledHeight = imgHeight * scale;
-    
-    const firstPageHeight = a4HeightPx - bottomMarginPx;
-    const otherPageHeight = a4HeightPx - topMarginPx - bottomMarginPx;
-    
-    let pages = [];
-    let remainingHeight = scaledHeight;
-    let isFirstPage = true;
-    
-    while (remainingHeight > 0) {
-      const pageHeightPx = isFirstPage ? firstPageHeight : otherPageHeight;
-      const pageHeightOriginal = (pageHeightPx * imgWidth) / a4WidthPx;
-      pages.push({
-        heightOriginal: pageHeightOriginal,
-        isFirst: isFirstPage
-      });
-      remainingHeight -= pageHeightPx;
-      isFirstPage = false;
-    }
-    
-    const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait', compress: true });
-    const pdfWidthMM = 210;
-    let yOffsetOriginal = 0;
-    const topMarginMM = (topMarginPx * 210) / a4WidthPx;
-    
-    for (let i = 0; i < pages.length; i++) {
-      const page = pages[i];
-      const sliceHeight = Math.min(page.heightOriginal, imgHeight - yOffsetOriginal);
-      
-      const sliceCanvas = document.createElement('canvas');
-      sliceCanvas.width = imgWidth;
-      sliceCanvas.height = sliceHeight;
-      const ctx = sliceCanvas.getContext('2d');
-      ctx.drawImage(img, 0, yOffsetOriginal, imgWidth, sliceHeight, 0, 0, imgWidth, sliceHeight);
-      const sliceData = sliceCanvas.toDataURL('image/jpeg', 0.9);
-      
-      const sliceHeightMM = (sliceHeight * pdfWidthMM) / imgWidth;
-      
-      if (i > 0) pdf.addPage();
-      
-      if (page.isFirst) {
-        pdf.addImage(sliceData, 'JPEG', 0, 0, pdfWidthMM, sliceHeightMM);
+      links.forEach(link => {
+        const rect = link.getBoundingClientRect();
+        const elementRect = element.getBoundingClientRect();
+        const relativeX = rect.left - elementRect.left;
+        const relativeY = rect.top - elementRect.top;
+        const pxToMm = (px) => (px * 25.4) / 96;
         
-        // Add clickable links with correct positions on first page
-        linkPositions.forEach(link => {
-          // Check if link is on first page (Y position less than first page height)
-          const linkYmm = link.y;
-          const pageHeightMM = (firstPageHeight * pdfWidthMM) / a4WidthPx;
-          
-          if (linkYmm < pageHeightMM) {
-            pdf.link(link.x, link.y, link.width, link.height, { url: link.url });
-          }
+        linkPositions.push({
+          url: link.href,
+          x: pxToMm(relativeX),
+          y: pxToMm(relativeY),
+          width: pxToMm(rect.width),
+          height: pxToMm(rect.height)
         });
-      } else {
-        pdf.addImage(sliceData, 'JPEG', 0, topMarginMM, pdfWidthMM, sliceHeightMM);
-        
-        // Add links on subsequent pages (adjust Y position)
-        linkPositions.forEach(link => {
-          const linkYmm = link.y;
-          const prevPagesHeight = i * ((otherPageHeight * pdfWidthMM) / a4WidthPx);
-          
-          if (linkYmm >= prevPagesHeight && linkYmm < prevPagesHeight + sliceHeightMM) {
-            const adjustedY = linkYmm - prevPagesHeight + topMarginMM;
-            pdf.link(link.x, adjustedY, link.width, link.height, { url: link.url });
-          }
+      });
+      
+      const dataUrl = await toJpeg(element, {
+        quality: 0.95,
+        pixelRatio: 2,
+        backgroundColor: '#ffffff',
+        cacheBust: true,
+      });
+      
+      const img = new Image();
+      img.src = dataUrl;
+      await new Promise(resolve => { img.onload = resolve; });
+      
+      const imgWidth = img.width;
+      const imgHeight = img.height;
+      
+      const a4WidthPx = 794;
+      const a4HeightPx = 1123;
+      const topMarginPx = 38;
+      const bottomMarginPx = 40;
+      
+      const scale = a4WidthPx / imgWidth;
+      const scaledHeight = imgHeight * scale;
+      
+      const firstPageHeight = a4HeightPx - bottomMarginPx;
+      const otherPageHeight = a4HeightPx - topMarginPx - bottomMarginPx;
+      
+      let pages = [];
+      let remainingHeight = scaledHeight;
+      let isFirstPage = true;
+      
+      while (remainingHeight > 0) {
+        const pageHeightPx = isFirstPage ? firstPageHeight : otherPageHeight;
+        const pageHeightOriginal = (pageHeightPx * imgWidth) / a4WidthPx;
+        pages.push({
+          heightOriginal: pageHeightOriginal,
+          isFirst: isFirstPage
         });
+        remainingHeight -= pageHeightPx;
+        isFirstPage = false;
       }
       
-      yOffsetOriginal += sliceHeight;
+      const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait', compress: true });
+      const pdfWidthMM = 210;
+      let yOffsetOriginal = 0;
+      const topMarginMM = (topMarginPx * 210) / a4WidthPx;
+      
+      for (let i = 0; i < pages.length; i++) {
+        const page = pages[i];
+        const sliceHeight = Math.min(page.heightOriginal, imgHeight - yOffsetOriginal);
+        
+        const sliceCanvas = document.createElement('canvas');
+        sliceCanvas.width = imgWidth;
+        sliceCanvas.height = sliceHeight;
+        const ctx = sliceCanvas.getContext('2d');
+        ctx.drawImage(img, 0, yOffsetOriginal, imgWidth, sliceHeight, 0, 0, imgWidth, sliceHeight);
+        const sliceData = sliceCanvas.toDataURL('image/jpeg', 0.9);
+        
+        const sliceHeightMM = (sliceHeight * pdfWidthMM) / imgWidth;
+        
+        if (i > 0) pdf.addPage();
+        
+        if (page.isFirst) {
+          pdf.addImage(sliceData, 'JPEG', 0, 0, pdfWidthMM, sliceHeightMM);
+          linkPositions.forEach(link => {
+            const linkYmm = link.y;
+            const pageHeightMM = (firstPageHeight * pdfWidthMM) / a4WidthPx;
+            
+            if (linkYmm < pageHeightMM) {
+              pdf.link(link.x, link.y, link.width, link.height, { url: link.url });
+            }
+          });
+        } else {
+          pdf.addImage(sliceData, 'JPEG', 0, topMarginMM, pdfWidthMM, sliceHeightMM);
+          linkPositions.forEach(link => {
+            const linkYmm = link.y;
+            const prevPagesHeight = i * ((otherPageHeight * pdfWidthMM) / a4WidthPx);
+            
+            if (linkYmm >= prevPagesHeight && linkYmm < prevPagesHeight + sliceHeightMM) {
+              const adjustedY = linkYmm - prevPagesHeight + topMarginMM;
+              pdf.link(link.x, adjustedY, link.width, link.height, { url: link.url });
+            }
+          });
+        }
+        
+        yOffsetOriginal += sliceHeight;
+      }
+      
+      pdf.save(`${data.name || 'resume'}.pdf`);
+    } catch (error) {
+      console.error(error);
+      alert('PDF generation failed.');
+    } finally {
+      setIsDownloading(false);
     }
-    
-    pdf.save(`${data.name || 'resume'}.pdf`);
-  } catch (error) {
-    console.error(error);
-    alert('PDF generation failed.');
-  } finally {
-    setIsDownloading(false);
-  }
-};
+  };
 
   const ResumeContent = () => (
     <div
@@ -290,118 +280,126 @@ export default function OverleafResumeTemplate() {
   if (!isClient) return null;
 
   return (
-    <div className="flex flex-col md:flex-row h-screen bg-gray-900 text-white">
-      <div className={`${showMobilePreview ? 'hidden md:block' : 'block'} w-full md:w-1/2 overflow-y-auto p-6 space-y-6 custom-scrollbar`}>
-        <h1 className="text-xl font-bold border-b border-gray-700 pb-2">Resume Editor</h1>
+    <div className="flex flex-col md:flex-row bg-linear-to-br from-gray-800 to-gray-800">
+      
+      {/* LEFT PANEL - FORM */}
+      <div className={`${showMobilePreview ? 'hidden md:block' : 'block'} w-full md:w-1/2 overflow-y-auto custom-scrollbar pb-10 md:pb-8`}>
         
-        <div className="space-y-3">
-          <input className="premium-input" placeholder="Full Name" value={data.name} onChange={e => update("name", e.target.value)} />
-          <div className="grid grid-cols-2 gap-3">
-            <input className="premium-input" placeholder="Location" value={data.location} onChange={e => update("location", e.target.value)} />
-            <input className="premium-input" placeholder="Phone" value={data.phone} onChange={e => update("phone", e.target.value)} />
-          </div>
-          <input className="premium-input" placeholder="Email" value={data.email} onChange={e => update("email", e.target.value)} />
+        {/* Header */}
+        {/* <div className="top-0 z-10 bg-linear-to-br from-[#0A0A0A] to-[#0A0A0A] pt-0 pb-6 px-4 border-b border-gray-700/50 backdrop-blur-sm">
+          <h1 className="text-xl md:text-2xl font-bold bg-linear-to-r from-blue-100 to-purple-100 bg-clip-text text-transparent">
+            Resume Builder
+          </h1>
+          <p className="text-xs text-gray-400 mt-0.5">Create your professional resume</p>
+        </div> */}
+
+        {/* Form Content */}
+        <div className="p-4 space-y-5">
           
-          <div className="grid grid-cols-3 gap-3">
-            <input className="premium-input" placeholder="LinkedIn URL" value={data.linkedin} onChange={e => update("linkedin", e.target.value)} />
-            <input className="premium-input" placeholder="GitHub URL" value={data.github} onChange={e => update("github", e.target.value)} />
-            <input className="premium-input" placeholder="LeetCode URL" value={data.leetcode} onChange={e => update("leetcode", e.target.value)} />
+          <div className="premium-section">
+            <h2 className="section-title">Personal Information</h2>
+            <input className="premium-input" placeholder="Full Name" value={data.name} onChange={e => update("name", e.target.value)} />
+            <div className="grid grid-cols-1 gap-2 mt-2">
+              <input className="premium-input" placeholder="Location" value={data.location} onChange={e => update("location", e.target.value)} />
+            </div>
+            <div className="grid grid-cols-2 gap-2 mt-2">
+              <input className="premium-input" placeholder="Phone" value={data.phone} onChange={e => update("phone", e.target.value)} />
+              <input className="premium-input" placeholder="Email" value={data.email} onChange={e => update("email", e.target.value)} />
+            </div>
+            <div className="grid grid-cols-3 gap-2 mt-2">
+              <input className="premium-input" placeholder="LinkedIn URL" value={data.linkedin} onChange={e => update("linkedin", e.target.value)} />
+              <input className="premium-input" placeholder="GitHub URL" value={data.github} onChange={e => update("github", e.target.value)} />
+              <input className="premium-input" placeholder="LeetCode URL" value={data.leetcode} onChange={e => update("leetcode", e.target.value)} />
+            </div>
           </div>
-          
-          <textarea className="premium-input" placeholder="Objective" rows={3} value={data.objective} onChange={e => update("objective", e.target.value)} />
-        </div>
 
-        <div className="section-container">
-          <p className="text-sm font-semibold mb-2 uppercase text-blue-400">Education</p>
-          {data.education.map((e, i) => (
-            <div key={i} className="mb-4 p-3 bg-gray-800 rounded-lg space-y-2 border border-gray-700">
-              <input className="premium-input" placeholder="College/University" value={e.college} onChange={v => updateList("education", i, "college", v.target.value)} />
-              <input className="premium-input" placeholder="Degree & Percentage" value={e.degree} onChange={v => updateList("education", i, "degree", v.target.value)} />
-              <div className="grid grid-cols-2 gap-2">
-                <input className="premium-input" placeholder="Date" value={e.date} onChange={v => updateList("education", i, "date", v.target.value)} />
-                <input className="premium-input" placeholder="City" value={e.city} onChange={v => updateList("education", i, "city", v.target.value)} />
+          <textarea className="premium-input" placeholder="Professional Objective / Summary" rows={3} value={data.objective} onChange={e => update("objective", e.target.value)} />
+
+          <div className="premium-section">
+            <h2 className="section-title">🎓 Education</h2>
+            {data.education.map((e, i) => (
+              <div key={i} className="premium-card">
+                <input className="premium-input" placeholder="College/University" value={e.college} onChange={v => updateList("education", i, "college", v.target.value)} />
+                <div className="grid grid-cols-2 gap-2 mt-2">
+                  <input className="premium-input" placeholder="Degree" value={e.degree} onChange={v => updateList("education", i, "degree", v.target.value)} />
+                  <input className="premium-input" placeholder="Year" value={e.date} onChange={v => updateList("education", i, "date", v.target.value)} />
+                </div>
+                <input className="premium-input mt-2" placeholder="City" value={e.city} onChange={v => updateList("education", i, "city", v.target.value)} />
+                <button onClick={() => removeItem("education", i)} className="remove-btn">Remove</button>
               </div>
-              <button onClick={() => removeItem("education", i)} className="text-xs text-red-400 hover:underline">Remove</button>
-            </div>
-          ))}
-          <button onClick={() => addItem("education", { college: "", date: "", degree: "", city: "" })} className="add-btn">+ Add Education</button>
-        </div>
+            ))}
+            <button onClick={() => addItem("education", { college: "", date: "", degree: "", city: "" })} className="add-btn">+ Add Education</button>
+          </div>
 
-        <div className="section-container">
-          <p className="text-sm font-semibold mb-2 uppercase text-blue-400">Skills / Coursework</p>
-          {data.coursework.map((skill, i) => (
-            <div key={i} className="flex gap-2 mb-2 items-center">
-              <input
-                className="premium-input flex-1"
-                placeholder="e.g., Operating Systems, DBMS, OOPS"
-                value={skill}
-                onChange={v => updateList("coursework", i, null, v.target.value)}
-              />
-              <button onClick={() => removeItem("coursework", i)} className="text-red-400 text-sm px-2 hover:underline">✕</button>
-            </div>
-          ))}
-          <button onClick={() => addItem("coursework", "")} className="add-btn">+ Add Skill/Course</button>
-        </div>
-
-        <div className="section-container">
-          <p className="text-sm font-semibold mb-2 uppercase text-blue-400">Projects</p>
-          {data.projects.map((p, i) => (
-            <div key={i} className="mb-4 p-3 bg-gray-800 rounded-lg space-y-2 border border-gray-700">
-              <input className="premium-input" placeholder="Project Title" value={p.title} onChange={v => updateList("projects", i, "title", v.target.value)} />
-              <input className="premium-input" placeholder="Tech Stack" value={p.tech} onChange={v => updateList("projects", i, "tech", v.target.value)} />
-              <input className="premium-input" placeholder="Date" value={p.date} onChange={v => updateList("projects", i, "date", v.target.value)} />
-              <textarea className="premium-input" placeholder="Description" value={p.desc} onChange={v => updateList("projects", i, "desc", v.target.value)} />
-              <button onClick={() => removeItem("projects", i)} className="text-xs text-red-400 hover:underline">Remove</button>
-            </div>
-          ))}
-          <button onClick={() => addItem("projects", { title: "", tech: "", date: "", desc: "" })} className="add-btn">+ Add Project</button>
-        </div>
-
-        <div className="section-container">
-          <p className="text-sm font-semibold mb-2 uppercase text-blue-400">Experience / Internship</p>
-          {data.experience.map((e, i) => (
-            <div key={i} className="mb-4 p-3 bg-gray-800 rounded-lg space-y-2 border border-gray-700">
-              <div className="grid grid-cols-2 gap-2">
-                <input className="premium-input" placeholder="Company Name" value={e.company} onChange={v => updateList("experience", i, "company", v.target.value)} />
-                <input className="premium-input" placeholder="Role" value={e.role} onChange={v => updateList("experience", i, "role", v.target.value)} />
+          <div className="premium-section">
+            <h2 className="section-title">📚 Skills / Coursework</h2>
+            {data.coursework.map((skill, i) => (
+              <div key={i} className="flex gap-2 mb-2 items-center">
+                <input className="premium-input flex-1" placeholder="e.g., Operating Systems, DBMS" value={skill} onChange={v => updateList("coursework", i, null, v.target.value)} />
+                <button onClick={() => removeItem("coursework", i)} className="remove-icon">✕</button>
               </div>
-              <input className="premium-input" placeholder="Duration (e.g., 06/2024 - 08/2024)" value={e.date} onChange={v => updateList("experience", i, "date", v.target.value)} />
-              <textarea className="premium-input" placeholder="Description" value={e.desc} onChange={v => updateList("experience", i, "desc", v.target.value)} />
-              <button onClick={() => removeItem("experience", i)} className="text-xs text-red-400 hover:underline">Remove</button>
-            </div>
-          ))}
-          <button onClick={() => addItem("experience", { company: "", role: "", date: "", desc: "" })} className="add-btn">+ Add Experience</button>
-        </div>
+            ))}
+            <button onClick={() => addItem("coursework", "")} className="add-btn">+ Add Skill/Course</button>
+          </div>
 
-        <div className="section-container">
-          <p className="text-sm font-semibold mb-2 uppercase text-blue-400">Certifications</p>
-          {data.certifications.map((c, i) => (
-            <div key={i} className="flex gap-2 mb-2 items-center">
-              <input
-                className="premium-input flex-1"
-                placeholder="e.g., AWS Certified Developer"
-                value={c}
-                onChange={v => updateList("certifications", i, null, v.target.value)}
-              />
-              <button onClick={() => removeItem("certifications", i)} className="text-red-400 text-sm px-2 hover:underline">✕</button>
-            </div>
-          ))}
-          <button onClick={() => addItem("certifications", "")} className="add-btn">+ Add Certification</button>
-        </div>
+          <div className="premium-section">
+            <h2 className="section-title">🚀 Projects</h2>
+            {data.projects.map((p, i) => (
+              <div key={i} className="premium-card">
+                <div className="grid grid-cols-2 gap-2">
+                  <input className="premium-input" placeholder="Project Title" value={p.title} onChange={v => updateList("projects", i, "title", v.target.value)} />
+                  <input className="premium-input" placeholder="Tech Stack" value={p.tech} onChange={v => updateList("projects", i, "tech", v.target.value)} />
+                </div>
+                <input className="premium-input mt-2" placeholder="Date" value={p.date} onChange={v => updateList("projects", i, "date", v.target.value)} />
+                <textarea className="premium-input mt-2" placeholder="Description" rows={2} value={p.desc} onChange={v => updateList("projects", i, "desc", v.target.value)} />
+                <button onClick={() => removeItem("projects", i)} className="remove-btn">Remove</button>
+              </div>
+            ))}
+            <button onClick={() => addItem("projects", { title: "", tech: "", date: "", desc: "" })} className="add-btn">+ Add Project</button>
+          </div>
 
-        <div className="section-container">
-          <p className="text-sm font-semibold mb-2 uppercase text-blue-400">Technical Skills</p>
-          <input className="premium-input mb-2" placeholder="Languages (e.g., Python, Java, JavaScript, SQL)" value={data.languages} onChange={e => update("languages", e.target.value)} />
-          <input className="premium-input mb-2" placeholder="Tools (e.g., VS Code, Git, Docker, Pycharm)" value={data.tools} onChange={e => update("tools", e.target.value)} />
-          <input className="premium-input" placeholder="Frameworks (e.g., React, Node.js, Express)" value={data.frameworks} onChange={e => update("frameworks", e.target.value)} />
-        </div>
+          <div className="premium-section">
+            <h2 className="section-title">💼 Experience / Internship</h2>
+            {data.experience.map((e, i) => (
+              <div key={i} className="premium-card">
+                <div className="grid grid-cols-2 gap-2">
+                  <input className="premium-input" placeholder="Company" value={e.company} onChange={v => updateList("experience", i, "company", v.target.value)} />
+                  <input className="premium-input" placeholder="Role" value={e.role} onChange={v => updateList("experience", i, "role", v.target.value)} />
+                </div>
+                <input className="premium-input mt-2" placeholder="Duration" value={e.date} onChange={v => updateList("experience", i, "date", v.target.value)} />
+                <textarea className="premium-input mt-2" placeholder="Description" rows={2} value={e.desc} onChange={v => updateList("experience", i, "desc", v.target.value)} />
+                <button onClick={() => removeItem("experience", i)} className="remove-btn">Remove</button>
+              </div>
+            ))}
+            <button onClick={() => addItem("experience", { company: "", role: "", date: "", desc: "" })} className="add-btn">+ Add Experience</button>
+          </div>
 
-        <button onClick={downloadPDF} disabled={isDownloading} className="download-btn">
-          {isDownloading ? "Generating..." : "Download PDF Resume"}
-        </button>
+          <div className="premium-section">
+            <h2 className="section-title">📜 Certifications</h2>
+            {data.certifications.map((c, i) => (
+              <div key={i} className="flex gap-2 mb-2 items-center">
+                <input className="premium-input flex-1" placeholder="e.g., AWS Certified Developer" value={c} onChange={v => updateList("certifications", i, null, v.target.value)} />
+                <button onClick={() => removeItem("certifications", i)} className="remove-icon">✕</button>
+              </div>
+            ))}
+            <button onClick={() => addItem("certifications", "")} className="add-btn">+ Add Certification</button>
+          </div>
+
+          <div className="premium-section">
+            <h2 className="section-title">⚡ Technical Skills</h2>
+            <input className="premium-input mb-2" placeholder="Languages (e.g., Python, Java, SQL)" value={data.languages} onChange={e => update("languages", e.target.value)} />
+            <input className="premium-input mb-2" placeholder="Tools (e.g., VS Code, Git, Docker)" value={data.tools} onChange={e => update("tools", e.target.value)} />
+            <input className="premium-input" placeholder="Frameworks (e.g., React, Node.js)" value={data.frameworks} onChange={e => update("frameworks", e.target.value)} />
+          </div>
+
+          <button onClick={downloadPDF} disabled={isDownloading} className="download-btn">
+            {isDownloading ? "Generating PDF..." : "📥 Download PDF Resume"}
+          </button>
+        </div>
       </div>
 
-      <div className={`${showMobilePreview ? 'flex' : 'hidden md:flex'} w-full md:w-1/2 bg-gray-200 flex-col items-center overflow-auto p-4`}>
+      {/* RIGHT PANEL - PREVIEW */}
+      <div className={`${showMobilePreview ? 'flex' : 'hidden md:flex'} w-full md:w-1/2 bg-gray-100 flex-col items-center overflow-auto p-4 pb-24 md:pb-8`}>
         <div className="sticky top-2 z-10 flex gap-3 bg-white px-4 py-2 rounded-full shadow-md">
           <button onClick={() => setZoomLevel(z => Math.max(z - 0.1, 0.5))} className="text-gray-800 font-bold px-2">−</button>
           <span className="text-gray-800 text-sm font-medium">{Math.round(zoomLevel * 100)}%</span>
@@ -412,13 +410,152 @@ export default function OverleafResumeTemplate() {
         </div>
       </div>
 
+      {/* Mobile Toggle Button - Simple Icon */}
+      <div className="md:hidden fixed bottom-24 right-4 z-50">
+        <button
+          onClick={() => setShowMobilePreview(!showMobilePreview)}
+          className="bg-blue-600 text-white p-3 rounded-full shadow-lg active:scale-95 transition-all duration-200"
+        >
+          {showMobilePreview ? <EyeOff size={22} /> : <Eye size={22} />}
+        </button>
+      </div>
+
       <style jsx>{`
-        .premium-input { width: 100%; padding: 10px; background: #111827; border: 1px solid #374151; border-radius: 6px; color: #f3f4f6; font-size: 13.5px; outline: none; }
-        .premium-input:focus { border-color: #3b82f6; }
-        .add-btn { width: 100%; padding: 8px; background: #1f2937; border: 1px dashed #4b5563; border-radius: 6px; color: #9ca3af; font-size: 13px; cursor: pointer; }
-        .download-btn { width: 100%; padding: 12px; background: #2563eb; color: white; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 20px; }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 10px; }
+        .premium-input {
+          width: 100%;
+          padding: 12px 14px;
+          background: #1e293b;
+          border: 1px solid #334155;
+          border-radius: 12px;
+          color: #f1f5f9;
+          font-size: 14px;
+          outline: none;
+          transition: all 0.2s ease;
+        }
+        .premium-input:focus {
+          border-color: #3b82f6;
+          box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
+        .premium-input::placeholder {
+          color: #64748b;
+        }
+        textarea.premium-input {
+          resize: vertical;
+          font-family: inherit;
+        }
+        .premium-section {
+          background: rgba(30,41,59,0.5);
+          border-radius: 16px;
+          padding: 16px;
+          border: 1px solid #334155;
+        }
+        .section-title {
+          font-size: 14px;
+          font-weight: 600;
+          color: #94a3b8;
+          margin-bottom: 12px;
+          letter-spacing: 0.5px;
+        }
+        .premium-card {
+          background: #0f172a;
+          border-radius: 12px;
+          padding: 14px;
+          margin-bottom: 12px;
+          border: 1px solid #334155;
+        }
+        .add-btn {
+          width: 100%;
+          padding: 10px;
+          background: #1e293b;
+          border: 1px dashed #475569;
+          border-radius: 10px;
+          color: #94a3b8;
+          font-size: 13px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s;
+          margin-top: 8px;
+        }
+        .add-btn:hover {
+          background: #334155;
+          color: #cbd5e1;
+          border-color: #3b82f6;
+        }
+        .remove-btn {
+          font-size: 11px;
+          color: #ef4444;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          margin-top: 8px;
+          padding: 4px 8px;
+          border-radius: 6px;
+          transition: all 0.2s;
+        }
+        .remove-btn:hover {
+          background: rgba(239,68,68,0.1);
+        }
+        .remove-icon {
+          background: transparent;
+          border: none;
+          color: #ef4444;
+          cursor: pointer;
+          font-size: 14px;
+          padding: 8px;
+          border-radius: 8px;
+        }
+        .remove-icon:hover {
+          background: rgba(239,68,68,0.1);
+        }
+        .download-btn {
+          width: 100%;
+          padding: 14px;
+          background: linear-gradient(135deg, #3b82f6, #2563eb);
+          color: white;
+          border-radius: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          border: none;
+          font-size: 15px;
+          margin-top: 8px;
+          margin-bottom: 20px;
+          transition: all 0.2s;
+        }
+        .download-btn:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(59,130,246,0.4);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: #1e293b;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #475569;
+          border-radius: 10px;
+        }
+        
+        @media (max-width: 768px) {
+          .premium-input {
+            padding: 11px 12px;
+            font-size: 15px;
+          }
+          .premium-section {
+            padding: 14px;
+          }
+          .section-title {
+            font-size: 13px;
+            margin-bottom: 10px;
+          }
+          .premium-card {
+            padding: 12px;
+          }
+          .add-btn, .download-btn {
+            padding: 12px;
+          }
+        }
       `}</style>
     </div>
   );

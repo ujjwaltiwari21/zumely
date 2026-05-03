@@ -18,7 +18,7 @@ export default function Home() {
     }, [])
 
     return (
-        <div className="min-h-screen bg-linear-to-b from-[#f8fafc] to-white dark:from-[#0A0A0A] dark:to-[#0A0A0A] transition-colors duration-500 overflow-x-hidden pt-0">
+        <div className="min-h-screen bg-linear-to-b from-[#f8fafc] to-white dark:from-[#0A0A0A] dark:to-[#0A0B0C] transition-colors duration-500 overflow-x-hidden pt-0">
             
             {/* Container with NO top padding on mobile */}
             <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 pt-0 pb-4 sm:pb-6 md:py-8">

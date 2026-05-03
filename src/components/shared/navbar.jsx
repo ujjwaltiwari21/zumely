@@ -119,7 +119,7 @@ export function Navbar() {
     { icon: User, label: "Profile", href: "/profile", active: pathname === "/profile" },
   ]
 
-  // Mobile Bottom Tab Items - Glassmorphism Style (Courses instead of Saved)
+  // Mobile Bottom Tab Items
   const mobileTabItems = [
     { icon: Home, label: "Home", href: "/", active: pathname === "/" },
     { icon: Search, label: "Explore", href: "/explore", active: pathname === "/explore" },
@@ -134,21 +134,19 @@ export function Navbar() {
 
   return (
     <>
-      {/* Desktop Navbar - ThemeToggle VISIBLE here */}
+      {/* Desktop Navbar - Apple Style */}
       <nav className="hidden md:block sticky top-0 z-50 w-full bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-800/50 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-center h-14">
-            {/* Logo */}
             <Link href="/" className="flex items-center gap-2 group">
-              <div className="w-7 h-7 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-md group-hover:scale-105 transition-transform">
+              <div className="w-7 h-7 bg-linear-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-md group-hover:scale-105 transition-transform">
                 Z
               </div>
-              <span className="text-lg font-semibold tracking-tight bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
+              <span className="text-lg font-semibold tracking-tight bg-linear-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
                 Zumely
               </span>
             </Link>
 
-            {/* Desktop Navigation Icons */}
             <div className="flex items-center gap-1">
               {desktopNavItems.map((item) => (
                 <Link
@@ -168,9 +166,7 @@ export function Navbar() {
               ))}
             </div>
 
-            {/* Right Side Actions - ThemeToggle KEPT HERE for desktop */}
             <div className="flex items-center gap-2">
-              {/* Notifications */}
               <button className="relative p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200">
                 <Bell size={18} strokeWidth={1.5} className="text-slate-600 dark:text-slate-400" />
                 {notifications > 0 && (
@@ -180,7 +176,6 @@ export function Navbar() {
                 )}
               </button>
 
-              {/* Messages */}
               <button className="relative p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200">
                 <MessageCircle size={18} strokeWidth={1.5} className="text-slate-600 dark:text-slate-400" />
                 {messages > 0 && (
@@ -190,7 +185,6 @@ export function Navbar() {
                 )}
               </button>
 
-              {/* THEME TOGGLE - Visible on Desktop */}
               <ThemeToggle />
 
               <div className="w-px h-5 bg-slate-200 dark:bg-slate-700 mx-1" />
@@ -223,7 +217,7 @@ export function Navbar() {
                         </Button>
                       </Link>
                       <Link href="/signup">
-                        <Button size="sm" className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-md rounded-xl text-xs px-4">
+                        <Button size="sm" className="bg-linear-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-md rounded-xl text-xs px-4">
                           Get Started
                         </Button>
                       </Link>
@@ -236,67 +230,54 @@ export function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile View */}
+      {/* Mobile View - NO BLACK SPACE AT TOP */}
       <div className="md:hidden">
-        {/* Top Header with Menu Button - THEME TOGGLE REMOVED from header */}
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-800/50 rounded-b-3xl shadow-lg">
-          <div className="flex justify-between items-center px-5 py-3">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-lg">
+        {/* Top Header - NO extra space at top */}
+        <div className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-800/50 shadow-lg">
+          <div className="flex justify-between items-center px-4 py-2.5">
+            <Link href="/" className="flex items-center gap-1.5">
+              <div className="w-7 h-7 bg-linear-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-xs shadow-md">
                 Z
               </div>
-              <span className="text-base font-bold bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
+              <span className="text-sm font-bold bg-linear-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
                 Zumely
               </span>
             </Link>
 
-            {/* Right Side Icons - NO THEME TOGGLE HERE */}
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="flex items-center justify-center w-10 h-10 rounded-2xl bg-slate-100 dark:bg-slate-800 active:scale-95 transition-all duration-200 shadow-sm"
-              >
-                {mobileMenuOpen ? (
-                  <X size={22} className="text-slate-600 dark:text-slate-400" />
-                ) : (
-                  <Menu size={22} className="text-slate-600 dark:text-slate-400" />
-                )}
-              </button>
-            </div>
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 active:scale-95 transition-all duration-200"
+            >
+              {mobileMenuOpen ? (
+                <X size={18} className="text-slate-600 dark:text-slate-400" />
+              ) : (
+                <Menu size={18} className="text-slate-600 dark:text-slate-400" />
+              )}
+            </button>
           </div>
-        </nav>
+        </div>
 
-        {/* Main Content Spacer */}
-        <div className="h-16" />
+        {/* Content Spacer - ONLY for content below navbar */}
+        <div className="h-12" />
 
-        {/* Glassmorphism Bottom Tab Bar - Premium Blur Effect */}
+        {/* Glassmorphism Bottom Tab Bar */}
         {!keyboardVisible && (
           <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/70 dark:bg-slate-950/70 backdrop-blur-2xl border-t border-white/20 dark:border-white/10 rounded-t-2xl shadow-2xl safe-bottom">
-            <div className="flex justify-around items-center px-2 py-2">
+            <div className="flex justify-around items-center px-1 py-1.5">
               {mobileTabItems.map((item) => {
                 const isActive = item.active
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all duration-200 group ${
+                    className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg transition-all duration-200 ${
                       isActive
                         ? "text-blue-600 dark:text-blue-400"
                         : "text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400"
                     }`}
                   >
-                    <div className={`relative transition-all duration-200 ${isActive ? 'scale-110' : 'scale-100'}`}>
-                      <item.icon 
-                        size={22} 
-                        strokeWidth={isActive ? 2.5 : 1.8}
-                        className="transition-all"
-                      />
-                      {isActive && (
-                        <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-blue-500 rounded-full"></div>
-                      )}
-                    </div>
-                    <span className={`text-[10px] font-medium transition-all ${isActive ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'opacity-70'}`}>
+                    <item.icon size={20} strokeWidth={isActive ? 2.5 : 1.8} />
+                    <span className={`text-[9px] font-medium ${isActive ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'opacity-70'}`}>
                       {item.label}
                     </span>
                   </Link>
@@ -307,16 +288,15 @@ export function Navbar() {
         )}
 
         {/* Bottom Safe Area Spacer */}
-        {!keyboardVisible && <div className="h-16" />}
+        {!keyboardVisible && <div className="h-14" />}
       </div>
 
-      {/* Mobile Bottom Sheet Menu - ThemeToggle INSIDE here */}
+      {/* Mobile Bottom Sheet Menu */}
       <div 
         className={`fixed inset-x-0 bottom-0 z-50 transform transition-all duration-300 ease-out md:hidden ${
           mobileMenuOpen ? 'translate-y-0' : 'translate-y-full'
         }`}
       >
-        {/* Backdrop with blur */}
         <div 
           className={`absolute inset-0 bg-black/40 backdrop-blur-md transition-opacity duration-300 ${
             mobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
@@ -324,99 +304,93 @@ export function Navbar() {
           onClick={() => setMobileMenuOpen(false)}
         />
         
-        {/* Bottom Sheet Content - Glassmorphism */}
         <div className="relative bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl rounded-t-3xl shadow-2xl border-t border-white/20 dark:border-white/10 max-h-[85vh] overflow-y-auto">
-          {/* Handle Bar */}
-          <div className="sticky top-0 bg-transparent pt-4 pb-2 flex justify-center">
-            <div className="w-12 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full"></div>
+          <div className="sticky top-0 bg-transparent pt-3 pb-1 flex justify-center">
+            <div className="w-10 h-1 bg-slate-300 dark:bg-slate-600 rounded-full"></div>
           </div>
 
-          {/* User Profile Section */}
-          <div className="px-5 py-4 border-b border-slate-100/50 dark:border-slate-800/50">
+          <div className="px-4 py-3 border-b border-slate-100/50 dark:border-slate-800/50">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
-                <User size={22} className="text-white" />
+              <div className="w-10 h-10 rounded-xl bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
+                <User size={18} className="text-white" />
               </div>
               <div className="flex-1">
-                <p className="font-semibold text-slate-800 dark:text-white">
+                <p className="font-semibold text-sm text-slate-800 dark:text-white">
                   {user?.email?.split('@')[0] || 'Guest User'}
                 </p>
-                <p className="text-xs text-slate-500 dark:text-slate-400 truncate max-w-[200px]">
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate max-w-45">
                   {user?.email || 'Sign in to access features'}
                 </p>
               </div>
-              <ChevronRight size={18} className="text-slate-400" />
+              <ChevronRight size={16} className="text-slate-400" />
             </div>
           </div>
 
-          {/* THEME TOGGLE INSIDE MENU - Moved here for mobile */}
-          <div className="px-5 py-4 border-b border-slate-100/50 dark:border-slate-800/50">
+          <div className="px-4 py-3 border-b border-slate-100/50 dark:border-slate-800/50">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-                  <Sparkles size={20} className="text-slate-600 dark:text-slate-400" />
+                <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                  <Sparkles size={16} className="text-slate-600 dark:text-slate-400" />
                 </div>
                 <div>
-                  <p className="font-semibold text-slate-800 dark:text-white">Appearance</p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">Switch between light and dark mode</p>
+                  <p className="font-semibold text-sm text-slate-800 dark:text-white">Appearance</p>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400">Light / Dark mode</p>
                 </div>
               </div>
               <ThemeToggle />
             </div>
           </div>
 
-          {/* Menu Items */}
-          <div className="p-4 space-y-1">
+          <div className="p-3 space-y-1">
             <Link
               href="/profile"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 text-sm"
             >
-              <User size={20} />
-              <span className="font-medium">View Profile</span>
+              <User size={18} />
+              <span>View Profile</span>
             </Link>
 
             <Link
               href="/settings"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 text-sm"
             >
-              <Settings size={20} />
-              <span className="font-medium">Settings & Privacy</span>
+              <Settings size={18} />
+              <span>Settings & Privacy</span>
             </Link>
 
             <Link
               href="/help"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 text-sm"
             >
-              <HelpCircle size={20} />
-              <span className="font-medium">Help & Support</span>
+              <HelpCircle size={18} />
+              <span>Help & Support</span>
             </Link>
           </div>
 
-          {/* Auth Actions */}
-          <div className="p-4 pt-2 pb-8 border-t border-slate-100/50 dark:border-slate-800/50">
+          <div className="p-3 pt-1 pb-6 border-t border-slate-100/50 dark:border-slate-800/50">
             {!loading && (
               <>
                 {user ? (
                   <Button
                     onClick={handleLogout}
                     variant="outline"
-                    className="w-full gap-2 border-red-200 dark:border-red-900/30 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-2xl py-5"
+                    className="w-full gap-2 border-red-200 dark:border-red-900/30 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl py-3 text-sm"
                   >
-                    <LogOut size={18} />
+                    <LogOut size={16} />
                     Sign Out
                   </Button>
                 ) : (
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-                      <Button variant="outline" className="w-full rounded-2xl py-5">
+                      <Button variant="outline" className="w-full rounded-xl py-3 text-sm">
                         Sign In
                       </Button>
                     </Link>
                     <Link href="/signup" onClick={() => setMobileMenuOpen(false)}>
-                      <Button className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 rounded-2xl py-5 shadow-lg">
+                      <Button className="w-full bg-linear-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 rounded-xl py-3 text-sm shadow-lg">
                         Create Free Account
                       </Button>
                     </Link>
