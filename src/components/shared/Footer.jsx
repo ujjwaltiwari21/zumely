@@ -1,4 +1,6 @@
-import { Mail, MapPin, ArrowUpRight, ShieldCheck, Zap } from "lucide-react"
+"use client"
+
+import { Mail, MapPin, ArrowUpRight, ShieldCheck, Zap, Sparkles, Briefcase, Users, Calendar, GraduationCap, Home, Search, Award, FileText, HelpCircle, Settings } from "lucide-react"
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -11,101 +13,156 @@ export function Footer() {
     { name: 'Facebook', hoverColor: 'group-hover:text-[#1877F2]', path: 'M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z' }
   ]
 
+  // Footer Navigation Links
+  const navLinks = {
+    platform: [
+      { name: "Home", href: "/", icon: Home },
+      { name: "Explore", href: "/explore", icon: Search },
+      { name: "Jobs", href: "/jobs", icon: Briefcase },
+      { name: "Courses", href: "/courses", icon: GraduationCap },
+    ],
+    resources: [
+      { name: "Network", href: "/network", icon: Users },
+      { name: "Interviews", href: "/interviews", icon: Calendar },
+      { name: "Templates", href: "/templates", icon: FileText },
+      { name: "About Us", href: "/about", icon: Sparkles },
+    ],
+    support: [
+      { name: "Help Center", href: "/help", icon: HelpCircle },
+      { name: "Privacy Policy", href: "/privacy", icon: ShieldCheck },
+      { name: "Terms of Service", href: "/terms", icon: Award },
+      { name: "Settings", href: "/settings", icon: Settings },
+    ],
+  }
+
   return (
-    <footer className="relative bg-[#020617] text-slate-400 py-24 overflow-hidden border-t border-white/5 font-sans">
+    <footer className="relative bg-gradient-to-b from-[#020617] to-[#03071a] text-slate-400 pt-16 pb-8 overflow-hidden border-t border-white/5 font-sans">
       
-      {/* Dynamic Glass Circles */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-600/5 blur-[120px] rounded-full -z-10" />
-      <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-indigo-600/5 blur-[100px] rounded-full -z-10" />
+      {/* Premium Background Effects */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-80 h-80 bg-blue-600/10 blur-[120px] rounded-full" />
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-indigo-600/10 blur-[120px] rounded-full" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-500/5 blur-[100px] rounded-full" />
+      </div>
 
-      <div className="max-w-[1440px] mx-auto px-6 md:px-16">
+      <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 md:px-12">
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-20">
-          
-          <div className="space-y-8">
-            <div className="flex items-center gap-3">
-              <div className="w-11 h-11 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-blue-500/20 border border-white/20">
-                <Zap size={22} className="text-white fill-white" />
-              </div>
+        {/* Top Section - Logo & Social */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12 pb-8 border-b border-white/10">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+              <Zap size={22} className="text-white" />
+            </div>
+            <div>
               <span className="text-2xl font-bold text-white tracking-tighter">Zumely<span className="text-blue-500">.</span>ai</span>
+              <p className="text-xs text-slate-500 mt-0.5">AI-Powered Career Ecosystem</p>
             </div>
-            
-            <p className="text-[14px] leading-relaxed font-light text-slate-400 max-w-sm">
-              The world's most advanced <strong>AI career ecosystem</strong>. Optimizing professional identities for the 2026 market using <strong>neural ATS analysis</strong>.
-            </p>
-            
-            <div className="flex flex-wrap gap-3">
-              {SocialLinks.map((social) => (
-                <a 
-                  key={social.name}
-                  href="#" 
-                  aria-label={social.name}
-                  className="group w-10 h-10 rounded-xl bg-white/[0.03] border border-white/10 backdrop-blur-md flex items-center justify-center hover:scale-110 hover:border-white/30 hover:bg-white/[0.08] transition-all duration-300 shadow-lg"
+          </div>
+
+          {/* Social Links */}
+          <div className="flex flex-wrap gap-2">
+            {SocialLinks.map((social) => (
+              <a 
+                key={social.name}
+                href="#" 
+                aria-label={social.name}
+                className="group w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:scale-110 hover:border-white/30 hover:bg-white/10 transition-all duration-300"
+              >
+                <svg 
+                  width="16" 
+                  height="16" 
+                  viewBox="0 0 24 24" 
+                  fill="currentColor" 
+                  className={`text-slate-500 transition-colors duration-300 ${social.hoverColor}`}
                 >
-                  <svg 
-                    width="18" 
-                    height="18" 
-                    viewBox="0 0 24 24" 
-                    fill="currentColor" 
-                    className={`text-slate-500 transition-colors duration-300 ${social.hoverColor}`}
-                  >
-                    <path d={social.path} />
-                  </svg>
-                </a>
-              ))}
-            </div>
+                  <path d={social.path} />
+                </svg>
+              </a>
+            ))}
           </div>
-
-          <div className="space-y-8">
-            <h4 className="text-white text-[11px] font-bold uppercase tracking-[0.3em] opacity-60">Services</h4>
-            <ul className="space-y-4 text-[14px] font-light">
-              <li><a href="#" className="hover:text-blue-400 transition-all hover:translate-x-1 inline-block">Neural Resume Builder</a></li>
-              <li><a href="#" className="hover:text-blue-400 transition-all hover:translate-x-1 inline-block">ATS Deep-Scan Audit</a></li>
-              <li><a href="#" className="hover:text-blue-400 transition-all hover:translate-x-1 inline-block">Career Trajectory</a></li>
-            </ul>
-          </div>
-
-          <div className="space-y-8">
-            <h4 className="text-white text-[11px] font-bold uppercase tracking-[0.3em] opacity-60">Company</h4>
-            <ul className="space-y-4 text-[14px] font-light">
-              <li><a href="#" className="hover:text-blue-400 transition-all hover:translate-x-1 inline-block">Success Reports</a></li>
-              <li><a href="#" className="hover:text-blue-400 transition-all hover:translate-x-1 inline-block">Privacy Protocol</a></li>
-              <li><a href="#" className="hover:text-blue-400 transition-all hover:translate-x-1 inline-block">Terms of Service</a></li>
-            </ul>
-          </div>
-
-          <div className="space-y-8">
-            <h4 className="text-white text-[11px] font-bold uppercase tracking-[0.3em] opacity-60">Support</h4>
-            <div className="p-6 bg-white/[0.02] backdrop-blur-3xl border border-white/5 rounded-[2rem] space-y-5">
-              <address className="not-italic space-y-4 text-[13px] font-light">
-                <div className="flex items-start gap-4">
-                  <MapPin size={18} className="text-blue-500 shrink-0" />
-                  <span className="text-slate-300">Badarpur, New-Delhi<br />India, 110044</span>
-                </div>
-                <div className="flex items-center gap-4">
-                  <Mail size={18} className="text-blue-500 shrink-0" />
-                  <a href="mailto:hello@zumely.ai" className="text-slate-300 hover:text-white transition-colors">hello@zumely.ai</a>
-                </div>
-              </address>
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full w-fit">
-                <ShieldCheck size={14} className="text-emerald-500" />
-                <span className="text-[10px] text-emerald-400 font-medium uppercase tracking-widest">ISO Secure</span>
-              </div>
-            </div>
-          </div>
-
         </div>
 
-        <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 text-[11px] font-medium tracking-[0.15em] uppercase">
-          <p className="opacity-40">© {currentYear} Zumely AI. All rights reserved.</p>
-          <div className="flex items-center gap-8">
-            <div className="flex items-center gap-2.5">
+        {/* Main Footer Links */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-12">
+          
+          {/* Platform Section */}
+          <div className="space-y-4">
+            <h4 className="text-white text-xs font-bold uppercase tracking-wider opacity-60">Platform</h4>
+            <ul className="space-y-3">
+              {navLinks.platform.map((link) => (
+                <li key={link.name}>
+                  <a href={link.href} className="flex items-center gap-2 text-sm text-slate-400 hover:text-blue-400 transition-all hover:translate-x-1 group">
+                    <link.icon size={14} className="opacity-50 group-hover:opacity-100" />
+                    <span>{link.name}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Resources Section */}
+          <div className="space-y-4">
+            <h4 className="text-white text-xs font-bold uppercase tracking-wider opacity-60">Resources</h4>
+            <ul className="space-y-3">
+              {navLinks.resources.map((link) => (
+                <li key={link.name}>
+                  <a href={link.href} className="flex items-center gap-2 text-sm text-slate-400 hover:text-blue-400 transition-all hover:translate-x-1 group">
+                    <link.icon size={14} className="opacity-50 group-hover:opacity-100" />
+                    <span>{link.name}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Support Section */}
+          <div className="space-y-4">
+            <h4 className="text-white text-xs font-bold uppercase tracking-wider opacity-60">Support</h4>
+            <ul className="space-y-3">
+              {navLinks.support.map((link) => (
+                <li key={link.name}>
+                  <a href={link.href} className="flex items-center gap-2 text-sm text-slate-400 hover:text-blue-400 transition-all hover:translate-x-1 group">
+                    <link.icon size={14} className="opacity-50 group-hover:opacity-100" />
+                    <span>{link.name}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact Section */}
+          <div className="space-y-4">
+            <h4 className="text-white text-xs font-bold uppercase tracking-wider opacity-60">Contact</h4>
+            <div className="space-y-3">
+              <address className="not-italic flex items-start gap-3 text-sm text-slate-400">
+                <MapPin size={16} className="text-blue-500 shrink-0 mt-0.5" />
+                <span>Badarpur, New Delhi<br />India, 110044</span>
+              </address>
+              <div className="flex items-center gap-3 text-sm text-slate-400">
+                <Mail size={16} className="text-blue-500 shrink-0" />
+                <a href="mailto:hello@zumely.ai" className="hover:text-white transition-colors">hello@zumely.ai</a>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full w-fit">
+              <ShieldCheck size={12} className="text-emerald-500" />
+              <span className="text-[9px] text-emerald-400 font-medium uppercase tracking-widest">ISO Secure</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="pt-6 pb-4 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-medium tracking-wider">
+          <p className="text-slate-500">
+            © {currentYear} Zumely AI. All rights reserved.
+          </p>
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-slate-500">Nodes Active</span>
+              <span className="text-slate-500">System Active</span>
             </div>
-            <div className="flex items-center gap-1.5 text-slate-300">
-              English (Global) <ArrowUpRight size={14} />
-            </div>
+            <a href="#" className="flex items-center gap-1 text-slate-500 hover:text-white transition-colors">
+              English (Global) <ArrowUpRight size={12} />
+            </a>
           </div>
         </div>
       </div>
