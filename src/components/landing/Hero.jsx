@@ -26,15 +26,6 @@ export function Hero() {
 
             <div className="max-w-7xl mx-auto w-full">
                 <div className="text-center space-y-6 md:space-y-10">
-                    
-                    {/* Premium Badge - Mobile Optimized */}
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm border border-slate-200/50 dark:border-slate-800/50 shadow-sm animate-fade-in">
-                        <Sparkles size={14} className="text-blue-500" />
-                        <span className="text-[11px] md:text-xs font-semibold tracking-wider text-slate-600 dark:text-slate-400 uppercase">
-                            AI-Powered Career Growth
-                        </span>
-                        <Zap size={10} className="text-yellow-500" />
-                    </div>
 
                     {/* Ultra-Bold Headline - Responsive Font Sizes */}
                     <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter text-slate-900 dark:text-white leading-[1.1] md:leading-[0.9] transition-all">

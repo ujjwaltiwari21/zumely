@@ -4,12 +4,12 @@ import React from "react"
 import { Check, X, ShieldCheck, Sparkles } from "lucide-react"
 
 const features = [
-  { name: "Neural Content Gen", traditional: false, zumely: "AI Powered" },
-  { name: "ATS Semantic Opt.", traditional: "Basic", zumely: "99.8%" },
-  { name: "Industry Templates", traditional: "Static", zumely: "Dynamic" },
-  { name: "Formatting Sync", traditional: "Manual", zumely: "Instant" },
-  { name: "Keyword Intel", traditional: false, zumely: true },
-  { name: "Recruiter Analysis", traditional: false, zumely: true },
+  { name: "Neural Content Gen", traditional: false, Fefine: "AI Powered" },
+  { name: "ATS Semantic Opt.", traditional: "Basic", Fefine: "99.8%" },
+  { name: "Industry Templates", traditional: "Static", Fefine: "Dynamic" },
+  { name: "Formatting Sync", traditional: "Manual", Fefine: "Instant" },
+  { name: "Keyword Intel", traditional: false, Fefine: true },
+  { name: "Recruiter Analysis", traditional: false, Fefine: true },
 ]
 
 export function Comparison() {
@@ -20,12 +20,12 @@ export function Comparison() {
         <header className="flex flex-col items-center text-center mb-12 md:mb-20">
           {/* <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-500/10 bg-blue-500/5 text-blue-600 dark:text-blue-400 font-bold text-[9px] md:text-[10px] uppercase tracking-[0.2em] mb-4">
             <ShieldCheck className="w-3 h-3 md:w-3.5 md:h-3.5" />
-            The Zumely Advantage
+            The Fefine Advantage
           </div> */}
           
           <h2 id="comp-heading" className="flex flex-wrap justify-center items-center gap-x-2 md:gap-x-3 text-2xl md:text-5xl font-medium text-slate-800 dark:text-white tracking-tighter leading-tight">
             <span>Why Choose</span>
-            <span className="text-blue-600 dark:text-blue-500 italic">Zumely AI</span>
+            <span className="text-blue-600 dark:text-blue-500 italic">Fefine AI</span>
             <span>Over Legacy Systems?</span>
           </h2>
         </header>
@@ -36,7 +36,7 @@ export function Comparison() {
             <div className="text-[9px] md:text-[11px] font-bold uppercase tracking-wider text-slate-400">Capability</div>
             <div className="text-[9px] md:text-[11px] font-bold uppercase tracking-wider text-center text-slate-400">Legacy</div>
             <div className="text-[9px] md:text-[11px] font-bold uppercase tracking-wider text-center text-blue-600 dark:text-blue-400 flex items-center justify-center gap-1">
-              <Sparkles className="hidden md:block w-3 h-3" /> Zumely
+              <Sparkles className="hidden md:block w-3 h-3" /> Fefine
             </div>
           </div>
 
@@ -61,15 +61,15 @@ export function Comparison() {
                 </div>
 
                 <div className="flex justify-center">
-                  {typeof f.zumely === "boolean" ? (
-                    f.zumely ? (
+                  {typeof f.Fefine === "boolean" ? (
+                    f.Fefine ? (
                       <div className="bg-blue-500/10 p-1 rounded-full">
                         <Check className="text-blue-600 dark:text-blue-400 w-4 h-4 md:w-5 md:h-5" strokeWidth={3} />
                       </div>
                     ) : <X className="w-4 h-4 md:w-5 md:h-5" />
                   ) : (
                     <span className="text-[9px] md:text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-600/10 dark:bg-blue-400/10 px-2 md:px-4 py-1 rounded-md md:rounded-lg border border-blue-600/20">
-                      {f.zumely}
+                      {f.Fefine}
                     </span>
                   )}
                 </div>

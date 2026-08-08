@@ -157,10 +157,10 @@ export function Navbar() {
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2 group">
               <div className="w-7 h-7 bg-linear-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-md group-hover:scale-105 transition-transform">
-                Z
+                F
               </div>
               <span className="text-lg font-semibold tracking-tight bg-linear-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
-                Zumely
+                Fefine
               </span>
             </Link>
 

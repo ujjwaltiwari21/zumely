@@ -41,7 +41,7 @@ export default function Home() {
                     
                     <p className="text-sm md:text-base lg:text-lg text-slate-500 dark:text-slate-400 font-medium mt-2 md:mt-3 max-w-2xl mx-auto px-2">
                         Create professional resumes that stand out. Powered by advanced AI and 
-                        <span className="font-semibold text-blue-600 dark:text-blue-400"> Zumely's</span> cutting-edge technology.
+                        <span className="font-semibold text-blue-600 dark:text-blue-400"> Fefine's</span> cutting-edge technology.
                     </p>
                 </div>
 
